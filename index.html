@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Desafio 18 — És um craque do futebol?</title>
+<title>Desafio Goat Football 🐐</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#0f1222; --fg:#f7f8ff; --muted:#b9c0e0; --card:#17192e; --border:#24284a;
-    --ok:#00d084; --warn:#ffd166; --bad:#ff6b6b; --accent:#6a0dad; --accent2:#9b30ff;
+    --ok:#00d084; --bad:#ff6b6b; --accent:#6a0dad; --accent2:#9b30ff;
   }
   *{box-sizing:border-box}
   html,body{height:100%}
@@ -17,7 +17,7 @@
     font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
     -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
   }
-  header{padding:18px 16px; display:flex; gap:12px; align-items:center; justify-content:space-between}
+  header{padding:18px 16px; display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap}
   .brand{font-weight:800; letter-spacing:.14em; text-transform:uppercase}
   .wrap{max-width:980px; margin:0 auto; padding:10px 16px 100px}
   .card{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:18px; box-shadow:0 10px 40px rgba(0,0,0,.35)}
@@ -31,7 +31,7 @@
     background:rgba(255,255,255,.04);
   }
   input[type="radio"]{margin-top:3px}
-  .btns{display:flex; gap:10px; justify-content:flex-end; margin-top:16px}
+  .btns{display:flex; gap:10px; justify-content:flex-end; margin-top:16px; flex-wrap:wrap}
   .btn{
     background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; border:none; padding:12px 16px;
     border-radius:12px; font-weight:800; cursor:pointer;
@@ -51,11 +51,12 @@
   }
   .discord strong{font-weight:800}
   .discord a{margin-left:auto; background:#fff; color:#2c2f36; text-decoration:none; font-weight:800; padding:10px 14px; border-radius:10px}
+  @media (max-width:640px){ header{justify-content:center; text-align:center} .discord{padding:10px} }
 </style>
 </head>
 <body>
   <header>
-    <div class="brand">Desafio 18</div>
+    <div class="brand">Desafio Goat Football 🐐</div>
     <div class="muted">Responde às 18 perguntas • objetivo: <b>≥ 60%</b></div>
   </header>
 
@@ -168,7 +169,6 @@ const QUESTIONS = [
 ];
 
 /* ================== FRASES DE VEREDITO ================== */
-/* >=60% (11 ou mais certas) */
 const GOOD_LINES = [
   "Sabes bola a sério! Se queres discutir ideias e elevar o nível, junta-te ao Discord 😉",
   "Craque! A tua leitura de jogo é top. Entra na comunidade e partilha o teu know-how!",
@@ -177,7 +177,6 @@ const GOOD_LINES = [
   "GG! Jogas fácil. Vem moderar debates e lançar desafios no nosso servidor.",
   "Qualidade técnica e cultura tática. O próximo passo? Entrar no Discord e liderar conversas!"
 ];
-/* <60% (10 ou menos certas) */
 const RETRY_LINES = [
   "Desta vez não entrou tudo… tenta outra vez ou junta-te ao Discord para aprender jogadas novas 😉",
   "Quase lá! Treina mais uma volta e cola-te à comunidade para dicas e debates.",
@@ -216,7 +215,7 @@ function renderQuiz(){
 }
 renderQuiz();
 
-/* ================== LOGIC ================== */
+/* ================== LÓGICA ================== */
 function getAnswers(){
   const answers = [];
   QUESTIONS.forEach((_,i)=>{
@@ -234,7 +233,6 @@ function grade(){
   hitsEl.textContent = correct;
   pctEl.textContent = `${pct}%`;
 
-  // Build verdict text
   const passed = pct >= 60;
   const pool = passed ? GOOD_LINES : RETRY_LINES;
   const line = pool[Math.floor(Math.random()*pool.length)];
@@ -243,7 +241,7 @@ function grade(){
     ? `<b class="ok">Acertaste ${correct}/${QUESTIONS.length} (${pct}%).</b><br>${line}`
     : `<b class="bad">Acertaste ${correct}/${QUESTIONS.length} (${pct}%).</b><br>${line}`;
 
-  // Show explanations with correct answers
+  // Explicações
   let html = "<b>Soluções & explicações:</b><br>";
   QUESTIONS.forEach((it,i)=>{
     const ok = it.opts[it.a];
@@ -253,11 +251,11 @@ function grade(){
   explain.style.display = "block";
 
   summary.style.display = "block";
-  // scroll to summary
   summary.scrollIntoView({behavior:'smooth'});
 }
 
 document.getElementById('submitBtn').addEventListener('click', grade);
+
 document.getElementById('resetBtn').addEventListener('click', ()=>{
   document.querySelectorAll('input[type="radio"]').forEach(r=>r.checked=false);
   summary.style.display = "none";
@@ -271,5 +269,10 @@ document.getElementById('againBtn').addEventListener('click', ()=>{
   window.scrollTo({top:0,behavior:'smooth'});
 });
 </script>
+
+  <div class="discord">
+    <span>💬 <strong>Curtes discutir futebol a sério?</strong> Junta-te ao nosso Discord e ajuda a crescer a comunidade!</span>
+    <a href="https://discord.gg/SEU-LINK-AQUI" target="_blank" rel="noopener">Entrar no Discord</a>
+  </div>
 </body>
 </html>
