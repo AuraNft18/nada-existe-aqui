@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Daniel Couto — Spark Your Aura</title>
+  <meta name="description" content="Get to know Daniel Couto and Aura — a motivational clothing brand. Follow on Instagram, TikTok, and X. Visit the Aura store." />
+  <meta name="robots" content="index, follow" />
+  <!-- Open Graph -->
+  <meta property="og:title" content="Spark Your Aura — Daniel Couto" />
+  <meta property="og:description" content="Meet Daniel Couto and discover Aura. Follow on social media and visit the store." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1544739313-61602a56df71?q=80&w=1200&auto=format&fit=crop" />
+  <meta property="og:image:alt" content="Purple gradient with subtle glow" />
+  <meta property="og:locale" content="en_US" />
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Spark Your Aura — Daniel Couto" />
+  <meta name="twitter:description" content="Meet Daniel and discover Aura. Follow on social media and visit the store." />
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1544739313-61602a56df71?q=80&w=1200&auto=format&fit=crop" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-start: #6a0dad;
+      --bg-end: #9b30ff;
+      --text: #f5f3ff;
+      --muted: #dcd6ff;
+      --btn: #ffffff;
+      --btn-text: #6a0dad;
+      --link: #ffffff;
+      --card: rgba(255,255,255,0.08);
+      --card-border: rgba(255,255,255,0.12);
+      --glow: 0 0 40px rgba(155, 48, 255, 0.55);
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background: radial-gradient(1200px 800px at 70% -10%, rgba(255,255,255,0.12), transparent 60%),
+                  linear-gradient(135deg, var(--bg-start), var(--bg-end));
+      background-attachment: fixed;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-top: 8px;
+      padding-bottom: 8px;
+    }
+    .logo {
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 14px;
+      padding: 8px 12px;
+      border: 1px solid var(--card-border);
+      background: var(--card);
+      border-radius: 999px;
+      box-shadow: var(--glow);
+      user-select: none;
+    }
+    .hero {
+      text-align: center;
+      padding: 56px 0 40px;
+    }
+    .eyebrow {
+      display: inline-block;
+      font-size: 12px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: 0.9;
+      margin-bottom: 10px;
+    }
+    h1 {
+      margin: 0 0 14px;
+      font-size: clamp(36px, 7vw, 64px);
+      line-height: 1.05;
+      font-weight: 800;
+      text-shadow: 0 4px 18px rgba(0,0,0,0.25);
+    }
+    .subtitle {
+      margin: 0 auto;
+      max-width: 720px;
+      color: #efe9ff;
+      font-size: clamp(16px, 2.8vw, 20px);
+      line-height: 1.6;
+      opacity: 0.95;
+    }
+    .cta {
+      margin-top: 28px;
+      display: inline-flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn {
+      background: var(--btn);
+      color: var(--btn-text);
+      padding: 14px 20px;
+      border-radius: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25), var(--glow);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn:hover { transform: translateY(-2px) scale(1.02); }
+    .btn:active { transform: translateY(0) scale(0.99); }
+    .btn.secondary {
+      background: transparent;
+      color: #fff;
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(8px);
+    }
+    .socials {
+      margin: 40px auto 10px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      max-width: 560px;
+    }
+    .social-card {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px;
+      border-radius: 16px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      text-decoration: none;
+      color: var(--link);
+      font-weight: 600;
+      transition: transform 0.16s ease, background 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.18);
+    }
+    .social-card:hover { transform: translateY(-2px); background: rgba(255,255,255,0.12); }
+    .social-card svg {
+      width: 20px;
+      height: 20px;
+      flex: 0 0 auto;
+    }
+    @media (max-width: 600px) {
+      .socials { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    .about {
+      margin: 40px auto 0;
+      max-width: 820px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 22px 22px;
+      box-shadow: var(--glow);
+    }
+    .about h2 {
+      margin: 0 0 8px;
+      font-size: clamp(22px, 3.4vw, 28px);
+    }
+    .about p {
+      margin: 0;
+      color: #f1ebff;
+      line-height: 1.7;
+      font-size: 16px;
+      opacity: 0.95;
+    }
+    .motivation {
+      text-align: center;
+      padding: 48px 0 10px;
+    }
+    .motivation h3 {
+      margin: 0 0 8px;
+      font-size: clamp(26px, 6vw, 40px);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+    .motivation p {
+      margin: 0 auto;
+      max-width: 720px;
+      color: #efe9ff;
+      opacity: 0.95;
+      line-height: 1.7;
+      font-size: 16px;
+    }
+    footer {
+      text-align: center;
+      padding: 40px 0 24px;
+      color: var(--muted);
+      font-size: 12px;
+      opacity: 0.8;
+    }
+    .visually-hidden {
+      position: absolute !important;
+      height: 1px; width: 1px;
+      overflow: hidden; clip: rect(1px, 1px, 1px, 1px);
+      white-space: nowrap; border: 0; padding: 0; margin: -1px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo" aria-label="Aura logo text">AURA</div>
+    </header>
+
+    <section class="hero" id="top">
+      <span class="eyebrow">Spark Your Aura</span>
+      <h1>Hi, I'm Daniel Couto</h1>
+      <p class="subtitle">
+        I'm a football player and the creator of Aura — a motivational clothing brand built to inspire you to chase your goals every day.
+      </p>
+      <div class="cta">
+        <a class="btn" href="https://www.auraclothe.com/en" target="_blank" rel="noopener noreferrer" aria-label="Visit Aura store">
+          <!-- cart icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M7 4h-2l-3 7v2h2l3.6 7h9.8l3.6-7h2v-2l-3-7h-2m-2 2h2l2.14 5h-10.28l2.14-5h2m-1 14a1 1 0 1 1 0-2 1 1 0 0 1 0 2m8 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>
+          Visit Aura
+        </a>
+        <a class="btn secondary" href="#socials">My Socials</a>
+      </div>
+    </section>
+
+    <section class="about">
+      <h2>About me</h2>
+      <p>
+        I play as a winger/wing-back and I’m building Aura as a way to share discipline, style, and motivation with my community.
+        Here you’ll find my official links — follow along and let’s grow together.
+      </p>
+    </section>
+
+   <section class="socials" id="socials" aria-label="Social media links">
+  <a class="social-card" href="https://youtube.com/@goatfootballoficial?si=RIN8Fr6g8fCLbt5H" target="_blank" rel="noopener noreferrer">
+    YouTube
+  </a>
+  <a class="social-card" href="https://www.tiktok.com/@d18couto?_t=ZG-8zwFMgc9nAO&_r=1" target="_blank" rel="noopener noreferrer">
+    TikTok
+  </a>
+  <a class="social-card" href="https://x.com/Daniel131117?t=Jwsff3IbBoTXixBnkSCoIQ&s=09" target="_blank" rel="noopener noreferrer">
+    X / Twitter
+  </a>
+  <a class="social-card" href="https://www.auraclothe.com/en" target="_blank" rel="noopener noreferrer">
+    Visit Store
+  </a>
+</section>
+
+
+    <section class="motivation" id="motivation">
+      <h3>Everything Starts With You</h3>
+      <p>
+        Focus on the work, stay humble, and keep moving forward. Your energy, your rhythm, your style — that’s your Aura.
+      </p>
+    </section>
+
+    <footer>
+      <!-- intentionally no copyright text per user request -->
+      Built with passion — Aura
+    </footer>
+  </div>
+</body>
+</html>
