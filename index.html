@@ -1,278 +1,275 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Penalty Rush — Mini Game</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;800&display=swap" rel="stylesheet">
+<title>Desafio 18 — És um craque do futebol?</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0f1222; --fg:#f7f8ff; --muted:#b9c0e0;
-    --accent:#6a0dad; --accent2:#9b30ff; --good:#00d084; --bad:#ff6b6b;
+    --bg:#0f1222; --fg:#f7f8ff; --muted:#b9c0e0; --card:#17192e; --border:#24284a;
+    --ok:#00d084; --warn:#ffd166; --bad:#ff6b6b; --accent:#6a0dad; --accent2:#9b30ff;
   }
   *{box-sizing:border-box}
   html,body{height:100%}
-  body{margin:0;background:var(--bg);color:var(--fg);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;display:flex;flex-direction:column}
-  header{padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px}
-  .brand{font-weight:800;letter-spacing:.14em;text-transform:uppercase}
-  .btn{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;font-weight:800;border-radius:12px;padding:10px 16px;cursor:pointer}
+  body{
+    margin:0; background:var(--bg); color:var(--fg);
+    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+  }
+  header{padding:18px 16px; display:flex; gap:12px; align-items:center; justify-content:space-between}
+  .brand{font-weight:800; letter-spacing:.14em; text-transform:uppercase}
+  .wrap{max-width:980px; margin:0 auto; padding:10px 16px 100px}
+  .card{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:18px; box-shadow:0 10px 40px rgba(0,0,0,.35)}
+  h1{margin:6px 0 0; font-size:clamp(24px,4vw,34px)}
   .muted{color:var(--muted)}
-  .wrap{flex:1;display:flex;justify-content:center;align-items:center;padding:10px}
-  canvas{width:100%;max-width:900px;aspect-ratio:16/9;border-radius:16px;box-shadow:0 18px 60px rgba(0,0,0,.35);background:#18312b}
-  .hud{position:fixed;left:50%;top:80px;transform:translateX(-50%);display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
-  .pill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:8px 12px;border-radius:999px}
-  .center{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
-  .overlay{background:rgba(10,12,24,.78);backdrop-filter:blur(4px);padding:18px 22px;border:1px solid rgba(255,255,255,.15);border-radius:16px;text-align:center;max-width:540px}
-  .overlay h2{margin:0 0 8px}
-  .overlay p{margin:4px 0}
+  .q{margin-top:14px; border-top:1px dashed var(--border); padding-top:14px}
+  .q h3{margin:0 0 8px; font-size:18px}
+  .opts{display:grid; gap:8px; margin-top:8px}
+  label.opt{
+    display:flex; align-items:flex-start; gap:10px; padding:10px 12px; border:1px solid var(--border); border-radius:12px; cursor:pointer;
+    background:rgba(255,255,255,.04);
+  }
+  input[type="radio"]{margin-top:3px}
+  .btns{display:flex; gap:10px; justify-content:flex-end; margin-top:16px}
+  .btn{
+    background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; border:none; padding:12px 16px;
+    border-radius:12px; font-weight:800; cursor:pointer;
+  }
+  .btn.ghost{background:rgba(255,255,255,.1)}
+  .score{display:flex; gap:12px; flex-wrap:wrap; margin-top:10px}
+  .chip{background:rgba(255,255,255,.08); border:1px solid var(--border); padding:8px 12px; border-radius:999px}
+  .result{margin-top:16px; padding:14px; border-radius:12px; border:1px solid var(--border); background:rgba(255,255,255,.06)}
+  .correct{border-color:rgba(0,208,132,.35); background:rgba(0,208,132,.08)}
+  .wrong{border-color:rgba(255,107,107,.35); background:rgba(255,107,107,.08)}
+  .answer{margin-top:6px; font-size:14px; color:var(--muted)}
+  .ok{color:var(--ok)} .bad{color:var(--bad)}
   /* Discord bar */
   .discord{
-    position:fixed; left:0; right:0; bottom:0; display:flex; align-items:center; gap:12px;
-    padding:10px 14px; background:linear-gradient(135deg,#5865f2,#7b86ff); color:#fff;
-    box-shadow:0 -10px 30px rgba(0,0,0,.35);
+    position:fixed; left:0; right:0; bottom:0; display:flex; align-items:center; gap:10px; padding:12px 14px;
+    background:linear-gradient(135deg,#5865f2,#7b86ff); color:#fff; box-shadow:0 -10px 30px rgba(0,0,0,.35);
   }
   .discord strong{font-weight:800}
-  .discord a{margin-left:auto;background:#fff;color:#2c2f36;text-decoration:none;font-weight:800;padding:10px 14px;border-radius:10px}
-  @media (max-width:640px){ .hud{top:64px} .discord{padding:10px} }
+  .discord a{margin-left:auto; background:#fff; color:#2c2f36; text-decoration:none; font-weight:800; padding:10px 14px; border-radius:10px}
 </style>
 </head>
 <body>
   <header>
-    <div class="brand">Penalty Rush</div>
-    <div class="muted">Tap/Click to aim • tap again to set power • score as many as you can!</div>
-    <button id="startBtn" class="btn">Start 60s</button>
+    <div class="brand">Desafio 18</div>
+    <div class="muted">Responde às 18 perguntas • objetivo: <b>≥ 60%</b></div>
   </header>
 
-  <div class="wrap"><canvas id="game" width="1600" height="900"></canvas></div>
+  <div class="wrap">
+    <div class="card">
+      <h1>És mesmo craque do futebol? ⚽</h1>
+      <p class="muted">Marca as respostas e clica em <b>Submeter</b>. No final recebes um veredito personalizado e um convite para a comunidade.</p>
 
-  <div class="hud">
-    <div class="pill">⏱️ Time: <b id="time">60</b>s</div>
-    <div class="pill">⚽ Goals: <b id="score">0</b></div>
-    <div class="pill">🔥 Streak: <b id="streak">0</b></div>
-    <div class="pill">🏆 Best: <b id="best">0</b></div>
-  </div>
+      <div id="quiz"></div>
 
-  <div class="center" id="centerMsg" style="display:none;">
-    <div class="overlay">
-      <h2 id="bigTitle">Penalty Rush</h2>
-      <p id="bigMsg" class="muted">Press <b>Start 60s</b> to begin. Tap/click to stop the <b>aim bar</b>, depois a <b>força</b>. Evita o guarda-redes!</p>
-      <p class="muted">Dica: pontaria nos cantinhos = mais golos 😉</p>
+      <div class="btns">
+        <button class="btn ghost" id="resetBtn">Limpar</button>
+        <button class="btn" id="submitBtn">Submeter</button>
+      </div>
+
+      <div id="summary" style="display:none">
+        <div class="score">
+          <div class="chip">Acertos: <b id="hits">0</b>/18</div>
+          <div class="chip">Percentagem: <b id="pct">0%</b></div>
+        </div>
+        <div id="verdict" class="result" style="margin-top:12px"></div>
+        <div id="explain" class="result" style="display:none"></div>
+        <div class="btns">
+          <button class="btn ghost" id="againBtn">Tentar outra vez</button>
+        </div>
+      </div>
     </div>
   </div>
 
   <div class="discord">
-    <span>🎮 <strong>Entra no nosso Discord</strong> — desafios semanais, tops, prémios e making-of!</span>
+    <span>💬 <strong>Curtes discutir futebol a sério?</strong> Junta-te ao nosso Discord e ajuda a crescer a comunidade!</span>
     <a href="https://discord.gg/SEU-LINK-AQUI" target="_blank" rel="noopener">Entrar no Discord</a>
   </div>
 
 <script>
-/* ====== basic state ====== */
-const cvs = document.getElementById('game');
-const ctx = cvs.getContext('2d');
-const ui = {
-  time: document.getElementById('time'),
-  score: document.getElementById('score'),
-  streak: document.getElementById('streak'),
-  best: document.getElementById('best'),
-  center: document.getElementById('centerMsg'),
-  bigTitle: document.getElementById('bigTitle'),
-  bigMsg: document.getElementById('bigMsg'),
-  startBtn: document.getElementById('startBtn'),
-};
-let running = false, timer = 60, score = 0, streak = 0, best = +localStorage.getItem('pen-best')||0;
-ui.best.textContent = best;
-
-/* field & objects (virtual 1600x900) */
-const goal = {x: 400, y: 200, w: 800, h: 300}; // center goal area
-const keeper = {x: 0, y: 0, r: 90, dir: 1, t: 0}; // moves on line
-const ball = {x: 800, y: 770, r: 22, vx:0, vy:0, moving:false};
-
-let phase = 'aim'; // aim -> power -> shot -> settle
-let aim = {val: 0.5, dir: 1}; // 0..1 across goal mouth
-let power = {val: 0.5, dir: 1}; // 0..1 strength
-let lastTs=0, tLeft=0;
-
-/* helpers */
-function clamp(n,a,b){ return Math.max(a,Math.min(b,n)); }
-function rand(a,b){ return a + Math.random()*(b-a); }
-
-/* draw */
-function drawField(){
-  // pitch gradient
-  const g = ctx.createLinearGradient(0,900,0,0);
-  g.addColorStop(0,'#1b5e34'); g.addColorStop(1,'#2e8b57');
-  ctx.fillStyle = g; ctx.fillRect(0,0,1600,900);
-
-  // goal box
-  ctx.fillStyle = '#e8f2ff';
-  ctx.fillRect(goal.x, goal.y, goal.w, 16); // crossbar
-  ctx.fillRect(goal.x, goal.y+goal.h, goal.w, 8); // line
-  // posts
-  ctx.fillRect(goal.x-8, goal.y, 8, goal.h+8);
-  ctx.fillRect(goal.x+goal.w, goal.y, 8, goal.h+8);
-  // penalty spot
-  ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(800, 760, 6, 0, Math.PI*2); ctx.fill();
-}
-
-function drawKeeper(){
-  // keeper position follows a curve across the goal
-  ctx.save();
-  ctx.translate(goal.x + keeper.x, goal.y + keeper.y);
-  ctx.fillStyle = '#111b37';
-  // body
-  ctx.beginPath(); ctx.ellipse(0, 120, 52, 100, 0, 0, Math.PI*2); ctx.fill();
-  // head
-  ctx.beginPath(); ctx.arc(0, 30, 28, 0, Math.PI*2); ctx.fillStyle='#223a7a'; ctx.fill();
-  // gloves
-  ctx.fillStyle = '#ffd166';
-  ctx.beginPath(); ctx.arc(-60, 110, 18, 0, Math.PI*2); ctx.fill();
-  ctx.beginPath(); ctx.arc(60, 110, 18, 0, Math.PI*2); ctx.fill();
-  ctx.restore();
-}
-
-function drawBall(){
-  ctx.fillStyle='#fff';
-  ctx.beginPath(); ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI*2); ctx.fill();
-  // simple shadow
-  ctx.fillStyle='rgba(0,0,0,.25)';
-  ctx.beginPath(); ctx.ellipse(ball.x+8, ball.y+18, ball.r*1.2, ball.r*.6, 0, 0, Math.PI*2); ctx.fill();
-}
-
-function drawUI(){
-  // aim bar (top of goal)
-  if(phase==='aim'){
-    const ax = goal.x + aim.val * goal.w;
-    ctx.strokeStyle='#ffffffaa'; ctx.lineWidth=6;
-    ctx.beginPath(); ctx.moveTo(ax, goal.y-28); ctx.lineTo(ax, goal.y+goal.h+10); ctx.stroke();
+/* ================== PERGUNTAS (18) ================== */
+const QUESTIONS = [
+  { q:"Qual foi o primeiro campeão da Taça/Liga dos Campeões europeus?",
+    opts:["Real Madrid","Benfica","AC Milan","Barcelona"], a:0,
+    why:"O Real Madrid venceu as cinco primeiras edições (1956–1960)."
+  },
+  { q:"Quem marcou o ‘gol do século’ em 1986 após driblar meia equipa adversária?",
+    opts:["Maradona","Pelé","Platini","Zico"], a:0,
+    why:"Maradona vs Inglaterra no Mundial 1986 (quartas)."
+  },
+  { q:"Qual clube tem mais títulos da Eredivisie (liga neerlandesa)?",
+    opts:["PSV","Ajax","Feyenoord","AZ Alkmaar"], a:1,
+    why:"O Ajax lidera historicamente em títulos da Eredivisie."
+  },
+  { q:"Quem é o melhor marcador de sempre da UEFA Champions League?",
+    opts:["Lionel Messi","Karim Benzema","Robert Lewandowski","Cristiano Ronaldo"], a:3,
+    why:"Cristiano Ronaldo é o líder histórico de golos na UCL."
+  },
+  { q:"Que seleção venceu o primeiro Campeonato Europeu (1960)?",
+    opts:["URSS","Espanha","Alemanha Ocidental","Iugoslávia"], a:0,
+    why:"A URSS venceu a final contra a Iugoslávia."
+  },
+  { q:"Qual clube escocês conquistou a Taça dos Clubes Campeões em 1967 (Lisbon Lions)?",
+    opts:["Rangers","Hearts","Celtic","Aberdeen"], a:2,
+    why:"O Celtic venceu o Inter em Lisboa, equipa conhecida como 'Lisbon Lions'."
+  },
+  { q:"Na J1 League (Japão), qual destes clubes conquistou títulos nacionais na era moderna?",
+    opts:["Kashima Antlers","Verdy Kawasaki","Vissel Kobe","Consadole Sapporo"], a:0,
+    why:"O Kashima Antlers é o multi-campeão mais consistente da J.League."
+  },
+  { q:"Qual seleção foi campeã do mundo em 2006?",
+    opts:["França","Itália","Alemanha","Brasil"], a:1,
+    why:"A Itália venceu a França nos penáltis, Berlim 2006."
+  },
+  { q:"Qual clube belga é tradicionalmente conhecido pela formação e títulos europeus dos anos 70/80?",
+    opts:["Anderlecht","Gent","Standard Liège","Club Brugge"], a:0,
+    why:"O Anderlecht ganhou taças europeias e é referência em formação."
+  },
+  { q:"Qual destes ganhou a Bola de Ouro ainda antes de 1995 (quando só europeus podiam vencer)?",
+    opts:["George Weah","Diego Maradona","Lev Yashin","Ronaldo (Fenómeno)"], a:2,
+    why:"Lev Yashin (1963) é o único guarda-redes a ganhar a Bola de Ouro."
+  },
+  { q:"Quem é o melhor marcador histórico da seleção de Portugal (A-team)?",
+    opts:["Eusébio","Cristiano Ronaldo","Pauleta","João Pinto"], a:1,
+    why:"Cristiano Ronaldo é o líder histórico de golos por seleções."
+  },
+  { q:"Qual foi o primeiro clube a ganhar a Champions e a Taça Intercontinental no mesmo ano (formato antigo)?",
+    opts:["Inter","Barcelona","Ajax","Real Madrid"], a:3,
+    why:"O Real Madrid (anos 50/60) dominou a Europa e venceu a Intercontinental."
+  },
+  { q:"Qual destas equipas indianas venceu títulos na Indian Super League?",
+    opts:["East Bengal","Mumbai City","Mohun Bagan","Churchill Brothers"], a:1,
+    why:"Mumbai City já foi campeão da ISL na era recente."
+  },
+  { q:"Qual jogador marcou mais golos numa única época da Premier League (38 jogos)?",
+    opts:["Alan Shearer","Mohamed Salah","Erling Haaland","Harry Kane"], a:2,
+    why:"Erling Haaland fixou o recorde numa época recente (38 jornadas)."
+  },
+  { q:"Que país organizou e venceu a Euro 1984?",
+    opts:["Alemanha Ocidental","França","Itália","Espanha"], a:1,
+    why:"A França de Platini venceu jogando em casa."
+  },
+  { q:"Qual clube suíço é o mais vencedor na Super League (era moderna)?",
+    opts:["Basel","Young Boys","Zürich","Servette"], a:0,
+    why:"O Basel dominou longos períodos do campeonato suíço recente."
+  },
+  { q:"Qual destas afirmações sobre a regra do “golo fora” é correta?",
+    opts:["Ainda vigora em todas as competições UEFA","Foi abolida pela UEFA","Só vale na final","Só vale quando há prolongamento"], a:1,
+    why:"A UEFA aboliu a regra do golo fora em 2021/22."
+  },
+  { q:"Quem é o jogador com mais jogos pela seleção do Japão (A-team)?",
+    opts:["Hidetoshi Nakata","Yuto Nagatomo","Keisuke Honda","Shinji Okazaki"], a:1,
+    why:"Yuto Nagatomo lidera o ranking de internacionalizações do Japão."
   }
-  // power bar (right side)
-  if(phase==='power'){
-    const py = 1 - power.val;
-    ctx.fillStyle='#ffffff55';
-    ctx.fillRect(1540, 140, 26, 620);
-    ctx.fillStyle='#6a0dad';
-    ctx.fillRect(1540, 140 + 620*(1-py), 26, 620*py);
-    ctx.strokeStyle='#fff'; ctx.strokeRect(1540, 140, 26, 620);
-  }
+];
+
+/* ================== FRASES DE VEREDITO ================== */
+/* >=60% (11 ou mais certas) */
+const GOOD_LINES = [
+  "Sabes bola a sério! Se queres discutir ideias e elevar o nível, junta-te ao Discord 😉",
+  "Craque! A tua leitura de jogo é top. Entra na comunidade e partilha o teu know-how!",
+  "Quem manda no meio-campo és tu. Bora trocar táticas no nosso Discord?",
+  "Isso é visão de jogo! Junta-te à equipa no Discord e ajuda a crescer a comunidade.",
+  "GG! Jogas fácil. Vem moderar debates e lançar desafios no nosso servidor.",
+  "Qualidade técnica e cultura tática. O próximo passo? Entrar no Discord e liderar conversas!"
+];
+/* <60% (10 ou menos certas) */
+const RETRY_LINES = [
+  "Desta vez não entrou tudo… tenta outra vez ou junta-te ao Discord para aprender jogadas novas 😉",
+  "Quase lá! Treina mais uma volta e cola-te à comunidade para dicas e debates.",
+  "Não desistas — repete o teste e aparece no Discord para falar de futebol a sério!",
+  "Faltou capricho na finalização. Recomeça e vem trocar ideias no nosso servidor!",
+  "Caminho longo faz-se a jogar. Tenta de novo e passa no Discord para partilhar dúvidas.",
+  "Resultado curto hoje — mas amanhã é outro jogo. Junta-te à comunidade e evolui connosco!"
+];
+
+/* ================== RENDER ================== */
+const quiz = document.getElementById('quiz');
+const summary = document.getElementById('summary');
+const hitsEl = document.getElementById('hits');
+const pctEl = document.getElementById('pct');
+const verdict = document.getElementById('verdict');
+const explain = document.getElementById('explain');
+
+function renderQuiz(){
+  quiz.innerHTML = "";
+  QUESTIONS.forEach((it, i)=>{
+    const q = document.createElement('div');
+    q.className = "q";
+    q.innerHTML = `
+      <h3>${i+1}. ${it.q}</h3>
+      <div class="opts">
+        ${it.opts.map((o,idx)=>`
+          <label class="opt">
+            <input type="radio" name="q${i}" value="${idx}">
+            <div>${o}</div>
+          </label>
+        `).join("")}
+      </div>
+    `;
+    quiz.appendChild(q);
+  });
+}
+renderQuiz();
+
+/* ================== LOGIC ================== */
+function getAnswers(){
+  const answers = [];
+  QUESTIONS.forEach((_,i)=>{
+    const checked = document.querySelector(`input[name="q${i}"]:checked`);
+    answers.push(checked ? +checked.value : null);
+  });
+  return answers;
 }
 
-function animate(ts){
-  if(!running){ drawFrame(); return; }
-  const dt = Math.min(32, ts - lastTs || 16); lastTs = ts;
-  tLeft -= dt/1000;
-  if(tLeft<=0){ endGame(); }
+function grade(){
+  const ans = getAnswers();
+  let correct = 0;
+  ans.forEach((v,i)=>{ if(v === QUESTIONS[i].a) correct++; });
+  const pct = Math.round((correct/QUESTIONS.length)*100);
+  hitsEl.textContent = correct;
+  pctEl.textContent = `${pct}%`;
 
-  // update keeper oscillation
-  keeper.t += dt/1000;
-  const sway = Math.sin(keeper.t*1.7)*0.5 + Math.sin(keeper.t*0.7 + 1.3)*0.5; // -1..1
-  const range = goal.w-140;
-  keeper.x = 70 + (sway*0.5+0.5)*range;
-  keeper.y = 90 + Math.cos(keeper.t*2.1)*18;
+  // Build verdict text
+  const passed = pct >= 60;
+  const pool = passed ? GOOD_LINES : RETRY_LINES;
+  const line = pool[Math.floor(Math.random()*pool.length)];
+  verdict.className = `result ${passed?'correct':'wrong'}`;
+  verdict.innerHTML = passed
+    ? `<b class="ok">Acertaste ${correct}/${QUESTIONS.length} (${pct}%).</b><br>${line}`
+    : `<b class="bad">Acertaste ${correct}/${QUESTIONS.length} (${pct}%).</b><br>${line}`;
 
-  // aim/power animations
-  if(phase==='aim'){
-    aim.val += aim.dir * dt/1600; // ~1.6s across
-    if(aim.val>=0.98||aim.val<=0.02) aim.dir*=-1;
-  } else if(phase==='power'){
-    power.val += power.dir * dt/1200;
-    if(power.val>=0.98||power.val<=0.02) power.dir*=-1;
-  } else if(phase==='shot' && ball.moving){
-    ball.x += ball.vx * dt/16;
-    ball.y += ball.vy * dt/16;
-    // stop when passes goal line or out
-    if(ball.y < goal.y+20 || ball.y<-40 || ball.x<goal.x-40 || ball.x>goal.x+goal.w+40){
-      settleShot(false);
-    }
-    // collide with keeper (simple circle)
-    const kx = goal.x + keeper.x;
-    const ky = goal.y + keeper.y + 100;
-    const dx = ball.x - kx, dy = ball.y - ky, rr = ball.r + keeper.r*0.55;
-    if(dx*dx+dy*dy < rr*rr){
-      // deflect
-      ball.vx *= -0.4; ball.vy *= -0.35;
-      settleShot(false, true);
-    }
-    // goal?
-    if(ball.y <= goal.y+10 && ball.x>goal.x && ball.x<goal.x+goal.w){
-      settleShot(true);
-    }
-  }
-  drawFrame();
-  requestAnimationFrame(animate);
+  // Show explanations with correct answers
+  let html = "<b>Soluções & explicações:</b><br>";
+  QUESTIONS.forEach((it,i)=>{
+    const ok = it.opts[it.a];
+    html += `<div class="answer">${i+1}. <b>${ok}</b> — ${it.why}</div>`;
+  });
+  explain.innerHTML = html;
+  explain.style.display = "block";
+
+  summary.style.display = "block";
+  // scroll to summary
+  summary.scrollIntoView({behavior:'smooth'});
 }
 
-function drawFrame(){
-  drawField(); drawKeeper(); drawBall(); drawUI();
-  ui.time.textContent = Math.max(0, Math.ceil(tLeft));
-  ui.score.textContent = score;
-  ui.streak.textContent = streak;
-}
-
-function resetBall(){
-  ball.x = 800; ball.y = 770; ball.vx=0; ball.vy=0; ball.moving=false;
-}
-
-function shoot(){
-  // target x along crossbar using aim.val; power affects speed/height
-  const tx = goal.x + aim.val*goal.w;
-  const p = power.val; // 0..1
-  const speed = 40 + p*55;
-  const height = 560 + p*200; // how high to the bar
-  const dx = (tx - ball.x);
-  const dy = -(height);
-  const len = Math.hypot(dx, dy);
-  ball.vx = (dx/len)*speed;
-  ball.vy = (dy/len)*speed;
-  ball.moving = true;
-}
-
-function settleShot(goalScored, saved=false){
-  if(!ball.moving) return;
-  ball.moving = false;
-  if(goalScored){
-    score++; streak++;
-    pulseText('GOOOOAL! ⚽', '#00ffa3');
-  }else{
-    streak = 0;
-    pulseText(saved?'Saved! 🧤':'Missed! ❌', '#ffd166');
-  }
-  setTimeout(()=>{ resetBall(); phase='aim'; }, 500);
-}
-
-function pulseText(msg, color){
-  ui.center.style.display='flex';
-  ui.bigTitle.textContent = msg;
-  ui.bigTitle.style.color = color;
-  ui.bigMsg.textContent = 'Tap/click to aim • tap again to set power';
-  setTimeout(()=>{ ui.center.style.display='none'; ui.bigTitle.style.color='#fff'; }, 500);
-}
-
-/* interactions */
-function click(){
-  if(!running){ startGame(); return; }
-  if(phase==='aim'){ phase='power'; }
-  else if(phase==='power'){ phase='shot'; shoot(); }
-}
-cvs.addEventListener('click', click);
-cvs.addEventListener('touchstart', (e)=>{ e.preventDefault(); click(); }, {passive:false});
-ui.startBtn.addEventListener('click', ()=>{ if(!running) startGame(); });
-
-function startGame(){
-  running = true; timer = 60; score=0; streak=0; tLeft=timer; phase='aim'; resetBall();
-  ui.center.style.display='none';
-  lastTs=performance.now(); requestAnimationFrame(animate);
-}
-function endGame(){
-  running = false;
-  if(score>best){ best=score; localStorage.setItem('pen-best', best); ui.best.textContent = best; }
-  ui.center.style.display='flex';
-  ui.bigTitle.textContent = 'Time up!';
-  ui.bigMsg.innerHTML = `Goals: <b>${score}</b> • Best: <b>${best}</b><br/>Press <b>Start 60s</b> to play again.`;
-}
-
-/* first paint */
-ui.center.style.display='flex';
-drawFrame();
+document.getElementById('submitBtn').addEventListener('click', grade);
+document.getElementById('resetBtn').addEventListener('click', ()=>{
+  document.querySelectorAll('input[type="radio"]').forEach(r=>r.checked=false);
+  summary.style.display = "none";
+  verdict.textContent = ""; explain.textContent = ""; explain.style.display="none";
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+document.getElementById('againBtn').addEventListener('click', ()=>{
+  document.querySelectorAll('input[type="radio"]').forEach(r=>r.checked=false);
+  summary.style.display = "none";
+  verdict.textContent = ""; explain.textContent = ""; explain.style.display="none";
+  window.scrollTo({top:0,behavior:'smooth'});
+});
 </script>
 </body>
 </html>
